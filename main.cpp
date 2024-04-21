@@ -26,12 +26,17 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     }
 }
 
+// this checks if the player and the npc are touching. 
+bool collide(Player& player, NPC& npc) {
+    return (player.getPlayerX() < npc.getNpcX() + 0.2f && player.getPlayerX() + 0.2f > npc.getNpcX() && player.getPlayerY() < npc.getNpcY() + 0.2f && player.getPlayerY() + 0.2f > npc.getNpcY());
+}
+
 int main() {
     if (!glfwInit()) {
         return -1;
     }
 
-    GLFWwindow* window = glfwCreateWindow(800, 600, "Player Controlled Rectangle", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(800, 600, "Demo 1", NULL, NULL);
     if (!window) {
         glfwTerminate();
         return -1;
@@ -44,7 +49,7 @@ int main() {
     glfwSetWindowUserPointer(window, &player);
     glfwSetKeyCallback(window, key_callback);
 
-    NPC npc;
+    NPC npc(0.0f, 0.0f, 0.00005f);
 
     while (!glfwWindowShouldClose(window)) {
         glClear(GL_COLOR_BUFFER_BIT);
@@ -52,6 +57,12 @@ int main() {
         npc.side_movement(); 
         // Draw the player rectangle
         player.player_display();
+
+        // this loop uses collide() to check if the two objects are touching and if
+        // they are, it uses death_reset in player.h to send the player back to the start. 
+        if (collide(player, npc)) {
+            player.death_reset(); 
+        }
 
         glfwSwapBuffers(window);
         glfwPollEvents();
