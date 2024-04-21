@@ -1,42 +1,60 @@
 #include <GLFW/glfw3.h>
 #include "npc.h"
+#include "player.h"
+#include<iostream> 
 
-int main(void)
-{
-    NPC npc; // npc object of type NPC
-    //NPC npc2; 
-    GLFWwindow* window;
 
-    /* Initialize the library */
-    if (!glfwInit())
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+    Player* player = static_cast<Player*>(glfwGetWindowUserPointer(window));
+
+    // Move the player based on key presses
+    if (action == GLFW_PRESS || action == GLFW_REPEAT) {
+        switch (key) {
+        case GLFW_KEY_W:
+            player->moveUp();
+            break;
+        case GLFW_KEY_S:
+            player->moveDown();
+            break;
+        case GLFW_KEY_A:
+            player->moveLeft();
+            break;
+        case GLFW_KEY_D:
+            player->moveRight();
+            break;
+        }
+    }
+}
+
+int main() {
+    if (!glfwInit()) {
         return -1;
+    }
 
-    /* Create a windowed mode window and its OpenGL context */
-    //window = glfwCreateWindow(640, 480, "Demo 1", NULL, NULL);
-    window = glfwCreateWindow(800, 600, "Demo 1", NULL, NULL); 
-    if (!window)
-    {
+    GLFWwindow* window = glfwCreateWindow(800, 600, "Player Controlled Rectangle", NULL, NULL);
+    if (!window) {
         glfwTerminate();
         return -1;
     }
 
-    /* Make the window's context current */
     glfwMakeContextCurrent(window);
 
-    /* Loop until the user closes the window */
-    while (!glfwWindowShouldClose(window))
-    {
-        /* Render here */
-        npc.display(); //npc.h display function
-         
+    // Create a Player object and set it as user pointer for the window
+    Player player(0.0f, 0.0f, 0.01f);
+    glfwSetWindowUserPointer(window, &player);
+    glfwSetKeyCallback(window, key_callback);
 
-        /* Swap front and back buffers */
+    NPC npc;
+
+    while (!glfwWindowShouldClose(window)) {
+        glClear(GL_COLOR_BUFFER_BIT);
+        npc.display();
+        npc.side_movement(); 
+        // Draw the player rectangle
+        player.player_display();
+
         glfwSwapBuffers(window);
-
-        /* Poll for and process events */
         glfwPollEvents();
-
-        npc.movement(); //npc.h movement function
     }
 
     glfwTerminate();
