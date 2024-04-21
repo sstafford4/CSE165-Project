@@ -11,7 +11,7 @@ using namespace std;
 class Player {
 private:
 	// initial player position 
-	float pos_x = 0.0f;
+	float pos_x = -0.9f;
 	float pos_y = 0.0f; 
 	// initial player speed
 	float pl_speed = 0.001f; // initial speed
@@ -37,5 +37,21 @@ public:
 		glVertex2f(pos_x, pos_y + 0.2f);
 
 		glEnd();
+	}
+	
+	// function for use with collision, resets player square to leftmost side
+	void death_reset() {
+		pos_x = -0.9f;
+		pos_y = 0.0f; 
+	}
+
+	// accessor to grant access to the pos_x value
+	float getPlayerX() const {
+		return pos_x;
+	}
+
+	// accessor to grant access to the pos_y value
+	float getPlayerY() const {
+		return pos_y;
 	}
 };
