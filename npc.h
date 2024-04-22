@@ -4,10 +4,9 @@
 #include <GLFW/glfw3.h>
 #include<cmath>
 
-using namespace std;
 
 class NPC {
-protected:
+private:
 	float square_pos_x = 0.6f; //initial position of square
 	float sq_speed_x = 0.00005f; //speed of movement of the square
 	// ideal speed is 0.00005f
@@ -41,13 +40,9 @@ public:
 			square_pos_x += sq_speed_x;
 		}
 	}
-	float getNpcX() {
-		return square_pos_x;
-	}
-
-	float getNpcY() {
-		return square_pos_y; 
-	}
+	// accessors 
+	float getNpcX();
+	float getNpcY();
 
 	~NPC() {}
 
