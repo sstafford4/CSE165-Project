@@ -6,15 +6,13 @@
 #include<iostream>
 
 
-using namespace std; 
-
 class Player {
 private:
 	// initial player position 
 	float pos_x = -0.9f;
 	float pos_y = 0.0f; 
 	// initial player speed
-	float pl_speed = 0.001f; // initial speed
+	float pl_speed = 0.002f; // initial speed
 
 public:
 	//default constructor
@@ -29,7 +27,7 @@ public:
 	void player_display() const {
 
 		glBegin(GL_QUADS);
-		glColor3f(1.0f, 0.0f, 1.0f);
+		glColor3f(1.0f, 0.0f, 1.0f); // makes pink square
 		//size of the square
 		glVertex2f(pos_x, pos_y);
 		glVertex2f(pos_x + 0.2f, pos_y);
@@ -46,12 +44,8 @@ public:
 	}
 
 	// accessor to grant access to the pos_x value
-	float getPlayerX() const {
-		return pos_x;
-	}
+	float getPlayerX() const;
 
 	// accessor to grant access to the pos_y value
-	float getPlayerY() const {
-		return pos_y;
-	}
+	float getPlayerY() const;
 };
