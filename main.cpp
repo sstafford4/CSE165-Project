@@ -3,7 +3,10 @@
 #include "player.h"
 #include<iostream> 
 
+using namespace std;
 
+// keyboard interaction for movement
+// -------------------------------------------------
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
     Player* player = static_cast<Player*>(glfwGetWindowUserPointer(window));
 
@@ -25,11 +28,33 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         }
     }
 }
+// -------------------------------------------------
 
-// this checks if the player and the npc are touching. 
-bool collide(Player& player, NPC& npc) {
+// accessing the private variables
+// -------------------------------------------------
+float NPC::getNpcX() {
+    return square_pos_x;
+}
+
+float NPC::getNpcY() {
+    return square_pos_y;
+}
+float Player::getPlayerX() const{
+    return pos_x;
+}
+
+float Player::getPlayerY() const{
+    return pos_y;
+}
+// -------------------------------------------------
+
+
+// this checks if the player and the npc are touching.
+// -------------------------------------------------
+bool static collide(Player& player, NPC& npc) {
     return (player.getPlayerX() < npc.getNpcX() + 0.2f && player.getPlayerX() + 0.2f > npc.getNpcX() && player.getPlayerY() < npc.getNpcY() + 0.2f && player.getPlayerY() + 0.2f > npc.getNpcY());
 }
+// -------------------------------------------------
 
 int main() {
     if (!glfwInit()) {
