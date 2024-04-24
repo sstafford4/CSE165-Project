@@ -1,6 +1,6 @@
 #pragma once
 #include<iostream>
-#include<GLFW/glfw3.h>
+#include <GLFW/glfw3.h>
 #include "NPCVirt.h"
 
 
@@ -58,9 +58,8 @@ public:
 	}
 
 	void npc_death() override{
-		moving = false;
-		x = 1.5f;
-	}
+		x = -1 + (static_cast<double>(rand()) / RAND_MAX) * (1 - (-1));
+    }
 
 	// accessors
 	float enemyX();
