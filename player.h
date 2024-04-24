@@ -9,13 +9,18 @@
 class Player {
 private:
 	// initial player position 
-	float pos_x = -0.9f;
+	float pos_x = 0.0f;
 	float pos_y = 0.0f; 
 	// initial player speed
 	float pl_speed = 0.002f; // initial speed
 
 public:
-	//default constructor
+	//default constructor`
+	Player() {
+		pos_x = 0.0f;
+		pos_y = 0.0f;
+		pl_speed = 0.002f; 
+	}
 	Player(float initialX, float initialY, float initialSpeed)
 		: pos_x(initialX), pos_y(initialY), pl_speed(initialSpeed) {}
 
@@ -39,8 +44,8 @@ public:
 	
 	// function for use with collision, resets player square to leftmost side
 	void death_reset() {
-		pos_x = -0.9f;
-		pos_y = 0.0f; 
+		pos_x = 0.0f;
+		pos_y = -0.8f; 
 	}
 
 	// accessor to grant access to the pos_x value
