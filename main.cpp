@@ -38,7 +38,7 @@ float Enemy::enemyY() {
 
 // keyboard interaction for movement
 // -------------------------------------------------
-Bullet b(0.0f, 0.0f, 0.002f);
+Bullet b(0.0f, 0.0f, 0.004f);
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
     Player* player = static_cast<Player*>(glfwGetWindowUserPointer(window)); // for player movement keys
   
