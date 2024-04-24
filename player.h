@@ -1,5 +1,5 @@
 #pragma once
-#include "npc.h"
+#include "enemy.h"
 #include <vector>
 #include <cmath>
 #include "GLFW/glfw3.h"
