@@ -1,9 +1,12 @@
 #pragma once
 #include "npc.h"
-#include<vector>
-#include<cmath>
-#include<GLFW/glfw3.h>
-#include<iostream>
+#include <vector>
+#include <cmath>
+#include "GLFW/glfw3.h"
+#include <iostream>
+
+#include <cstdlib>
+#include <ctime>
 
 
 class Player {
@@ -35,17 +38,17 @@ public:
 		glColor3f(1.0f, 0.0f, 1.0f); // makes pink square
 		//size of the square
 		glVertex2f(pos_x, pos_y);
-		glVertex2f(pos_x + 0.2f, pos_y);
-		glVertex2f(pos_x + 0.2f, pos_y + 0.2f);
-		glVertex2f(pos_x, pos_y + 0.2f);
+		glVertex2f(pos_x + 0.1f, pos_y);
+		glVertex2f(pos_x + 0.1f, pos_y + 0.1f);
+		glVertex2f(pos_x, pos_y + 0.1f);
 
 		glEnd();
 	}
 	
 	// function for use with collision, resets player square to leftmost side
 	void death_reset() {
-		pos_x = 0.0f;
-		pos_y = -0.8f; 
+		pos_x = -1 + (static_cast<double>(rand()) / RAND_MAX) * (1 - (-1));
+		pos_y = -1 + (static_cast<double>(rand()) / RAND_MAX) * (1 - (-1));
 	}
 
 	// accessor to grant access to the pos_x value
