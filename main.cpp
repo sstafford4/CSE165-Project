@@ -1,41 +1,47 @@
 #include <GLFW/glfw3.h>
-#include "npc.h"
-#include "bullet.h"
 #include "player.h"
+#include "NPCVirt.h"
+#include"bullet.h"
+#include "enemy.h"
+#include<vector>
 #include<iostream> 
 
 using namespace std;
 
 // accessing the private variables
 // -------------------------------------------------
-float NPC::getNpcX() {
-    return square_pos_x;
-}
-float NPC::getNpcY() {
-    return square_pos_y;
-}
+
 float Player::getPlayerX() const {
     return pos_x;
 }
+
 float Player::getPlayerY() const {
     return pos_y;
 }
-float Bullet::getBulletX() const {
-    return bul_x;
-}
-float Bullet::getBulletY() const {
-    return bul_y;
+
+float Bullet::returnBulletY() const{
+    return bullet_y;
 }
 
-Bullet b(0.0f, 0.0f, 0.0002f);
+float Bullet::returnBulletX() const {
+    return bullet_x; 
+}
 
+float Enemy::enemyX() {
+    return x; 
+}
+
+float Enemy::enemyY() {
+    return y; 
+}
 // -------------------------------------------------
 
 // keyboard interaction for movement
 // -------------------------------------------------
+Bullet b(0.0f, 0.0f, 0.002f);
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
-    Player* player = static_cast<Player*>(glfwGetWindowUserPointer(window));
-
+    Player* player = static_cast<Player*>(glfwGetWindowUserPointer(window)); // for player movement keys
+  
     // Move the player based on key presses
     if (action == GLFW_PRESS || action == GLFW_REPEAT) {
         switch (key) {
@@ -50,31 +56,32 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             break;
         case GLFW_KEY_D:
             player->moveRight();
-            break;
+            break; 
         case GLFW_KEY_ESCAPE:
             glfwDestroyWindow(window);
-            break;
         case GLFW_KEY_SPACE:
             if (action == GLFW_PRESS) {
-                // Set bullet's position to player's position
                 b.setBulletPosition(player->getPlayerX(), player->getPlayerY());
+
             }
-            break;
         }
     }
-}
+ }
 // -------------------------------------------------
+
 
 // this checks if the player and the npc are touching.
 // -------------------------------------------------
-bool static collide(Player& player, NPC& npc) {
-    return (player.getPlayerX() < npc.getNpcX() + 0.2f && player.getPlayerX() + 0.2f > npc.getNpcX() && player.getPlayerY() < npc.getNpcY() + 0.2f && player.getPlayerY() + 0.2f > npc.getNpcY());
+bool static collide(Player& player, Enemy& npc) {
+    return (player.getPlayerX() < npc.enemyX() + 0.2f && player.getPlayerX() + 0.2f > npc.enemyX() && player.getPlayerY() < npc.enemyY() + 0.2f && player.getPlayerY() + 0.2f > npc.enemyY());
 }
 
-bool static collideBullet(Bullet& bull, NPC& npc) {
-    return (bull.getBulletX() < npc.getNpcX() + 0.2f && bull.getBulletX() + 0.2f > npc.getNpcX() && bull.getBulletY() < npc.getNpcY() + 0.2f && bull.getBulletY() + 0.2f > npc.getNpcY());
+bool static enemy_death(Bullet& bull, Enemy& npc) {
+    return (bull.returnBulletX() < npc.enemyX() + 0.2f && bull.returnBulletX() + 0.2f > npc.enemyX() && bull.returnBulletY() < npc.enemyY() + 0.2f && bull.returnBulletY() + 0.2f > npc.enemyY());
+
 }
 // -------------------------------------------------
+
 
 int main() {
     if (!glfwInit()) {
@@ -90,33 +97,60 @@ int main() {
     glfwMakeContextCurrent(window);
 
     // Create a Player object and set it as user pointer for the window
-    Player player(0.0f, 0.0f, 0.025f);
-    glfwSetWindowUserPointer(window, &player);
-    glfwSetKeyCallback(window, key_callback);
+    // player() takes in x_pos, y_pos, and initial speed.
+    Player player(-0.1f, -0.8f, 0.025f);
 
-    NPC npc(0.0f, 0.0f, 0.00005f);
+    // Enabling the key callbacks
+    // -------------------------------------------------
+    glfwSetWindowUserPointer(window, &player); 
+    glfwSetKeyCallback(window, key_callback);
+    // -------------------------------------------------
+
+    // taking in initial xy pos and initial speed. 
+    Enemy npc(-0.1f, -0.4f, 0.00009f);
+    Enemy npc2(0.3f, 0.1f, 0.00025f);
+
+    // upcasting to create bullet bill enemy type
+    NPCVirt *ptr;
+    Enemy a(-0.1f, 0.7f, 0.0005f);
+    ptr = &a;
 
     while (!glfwWindowShouldClose(window)) {
         glClear(GL_COLOR_BUFFER_BIT);
-        npc.display();
-        npc.side_movement();
+        npc.display(0.0f, 1.0f, 1.0f); // generates teal color
+        npc.side_movement(); 
+
+        npc2.display(1.0f, 0.5f, 0.5f); // generates a salmon colored square
+        npc2.side_movement();
+
+        // draws the bullet bill npc 
+        ptr->display();
+        ptr->scroll_movement();  
+
         // Draw the player rectangle
         player.player_display();
 
         if (b.isActive()) {
-            b.fired();  // Move the bullet
-            b.display();  // Render the bullet
+            b.fire();
+            b.bullet_display(); 
         }
-
 
         // this loop uses collide() to check if the two objects are touching and if
         // they are, it uses death_reset in player.h to send the player back to the start. 
-        if (collide(player, npc)) {
-            player.death_reset();
+       if (collide(player, npc) || collide(player, npc2)){
+         player.death_reset(); 
+       }
+
+        if (enemy_death(b, a)){
+            ptr->npc_death();
         }
 
-        if (collideBullet(b, npc)) {
-            //isnt made yet, but it'll destroy the enemy object
+        if (enemy_death(b, npc)) {
+            npc.npc_death(); 
+        }
+
+        if (enemy_death(b, npc2)) {
+            npc2.npc_death();
         }
 
         glfwSwapBuffers(window);
