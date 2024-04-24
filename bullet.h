@@ -1,35 +1,46 @@
 #pragma once
-#include"player.h"
-#include"npc.h"
+#include "player.h"
 #include<iostream>
-#include<GLFW/glfw3.h>
+#include <GLFW/glfw3.h>
 
-
-class Bullet : public Player{
+class Bullet {
 private:
-	float bullet_x;
-	float bullet_y;
-	float bullet_speed; 
+	float bul_x;
+	float bul_y;
+	float bul_speed;
+	bool active;
 
 public:
 	Bullet(float initialX, float initialY, float initialSpeed)
-		: bullet_x(initialX), bullet_y(initialY), bullet_speed(initialSpeed) {}
+		: bul_x(initialX), bul_y(initialY), bul_speed(initialSpeed), active(false) {}
 
-	//Bullet(Player* playerX, Player* playerY, float initialSpeed) : bullet_x(playerX), bullet_y(playerY), bullet_speed(initialSpeed) {}
-
-	void fire() {
-		bullet_y += bullet_speed; 
+	void setBulletPosition(float x_coord, float y_coord) {
+		bul_x = x_coord;
+		bul_y = y_coord;
+		active = true;
 	}
 
-	void bullet_display(){
+	void fired() {
+		if (active) {
+			bul_x += bul_speed;
+		}
+	}
+
+	bool isActive() const {
+		return active;
+	}
+
+	void display() {
 		glBegin(GL_QUADS);
-		glColor3f(1.0f, 0.0f, 0.0f); // Red color
-		glVertex2f(bullet_x, bullet_y);
-		glVertex2f(bullet_x + 0.05f, bullet_y);
-		glVertex2f(bullet_x + 0.05f, bullet_y + 0.05f);
-		glVertex2f(bullet_x, bullet_y + 0.05f);
+		glColor3f(1.0f, 1.0f, 0.0f);//yellow color
+		//size of the square
+		glVertex2f(bul_x, bul_y);
+		glVertex2f(bul_x + 0.05f, bul_y);
+		glVertex2f(bul_x + 0.05f, bul_y + 0.05f);
+		glVertex2f(bul_x, bul_y + 0.05f);
 		glEnd();
 	}
-	// accessor
-	//float returnBulletY() const;
+
+	float getBulletX() const;
+	float getBulletY() const;
 };
