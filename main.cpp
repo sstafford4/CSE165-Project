@@ -137,7 +137,7 @@ int main() {
 
         // this loop uses collide() to check if the two objects are touching and if
         // they are, it uses death_reset in player.h to send the player back to the start. 
-       if (collide(player, npc) || collide(player, npc2)){
+       if (collide(player, npc) || collide(player, npc2) || collide(player, a)){
          player.death_reset(); 
        }
 
