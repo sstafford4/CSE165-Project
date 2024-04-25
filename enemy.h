@@ -59,6 +59,8 @@ public:
 
 	void npc_death() override{
 		x = -1 + (static_cast<double>(rand()) / RAND_MAX) * (1 - (-1));
+		y = -.6 + (static_cast<double>(rand()) / RAND_MAX) * (1 - (-.6));
+
     }
 
 	// accessors
