@@ -45,12 +45,6 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     // Move the player based on key presses
     if (action == GLFW_PRESS || action == GLFW_REPEAT) {
         switch (key) {
-        case GLFW_KEY_W:
-            player->moveUp();
-            break;
-        case GLFW_KEY_S:
-            player->moveDown();
-            break;
         case GLFW_KEY_A:
             player->moveLeft();
             break;
