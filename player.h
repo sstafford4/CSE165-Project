@@ -2,7 +2,7 @@
 #include "enemy.h"
 #include <vector>
 #include <cmath>
-#include "GLFW/glfw3.h"
+#include <GLFW/glfw3.h>
 #include <iostream>
 
 #include <cstdlib>
@@ -27,8 +27,6 @@ public:
 	Player(float initialX, float initialY, float initialSpeed)
 		: pos_x(initialX), pos_y(initialY), pl_speed(initialSpeed) {}
 
-	void moveUp() { pos_y += pl_speed; }
-	void moveDown() { pos_y -= pl_speed; }
 	void moveLeft() { pos_x -= pl_speed; }
 	void moveRight() { pos_x += pl_speed; }
 
